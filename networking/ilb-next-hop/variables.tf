@@ -14,12 +14,6 @@
  * limitations under the License.
  */
 
-variable "ilb_right_enable" {
-  description = "Route right to left traffic through ILB."
-  type        = bool
-  default     = false
-}
-
 variable "ilb_session_affinity" {
   description = "Session affinity configuration for ILBs."
   type        = string
@@ -33,12 +27,6 @@ variable "ip_ranges" {
     left  = "10.0.0.0/24"
     right = "10.0.1.0/24"
   }
-}
-
-variable "prefix" {
-  description = "Prefix used for resource names."
-  type        = string
-  default     = "ilb-test"
 }
 
 variable "project_create" {
