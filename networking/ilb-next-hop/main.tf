@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 
-# locals {
-#   addresses = {
-#     for k, v in module.addresses.internal_addresses :
-#     trimprefix(k, local.prefix) => v.address
-#   }
-# }
-
 module "project" {
   source         = "../../modules/project"
   name           = var.project_id
