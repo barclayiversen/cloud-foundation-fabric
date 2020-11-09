@@ -15,7 +15,7 @@
  */
 
 module "project" {
-  source         = "../../modules/project"
+  source         = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/project?ref=tf-training"
   name           = var.project_id
   project_create = var.project_create
   services = [
@@ -29,7 +29,7 @@ module "project" {
 }
 
 module "service-accounts" {
-  source     = "../../modules/iam-service-account"
+  source     = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/iam-service-account?ref=tf-training"
   project_id = module.project.project_id
   name       = "gce-vm"
   iam_project_roles = {
@@ -41,7 +41,7 @@ module "service-accounts" {
 }
 
 module "addresses" {
-  source     = "../../modules/net-address"
+  source     = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/net-address?ref=tf-training"
   project_id = module.project.project_id
   internal_addresses = {
     "ilb-left" = {

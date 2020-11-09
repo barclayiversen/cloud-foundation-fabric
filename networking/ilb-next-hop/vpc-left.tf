@@ -15,7 +15,7 @@
  */
 
 module "vpc-left" {
-  source     = "../../modules/net-vpc"
+  source     = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/net-vpc?ref=tf-training"
   project_id = module.project.project_id
   name       = "left"
   subnets = [
@@ -38,7 +38,7 @@ module "vpc-left" {
 }
 
 module "firewall-left" {
-  source               = "../../modules/net-vpc-firewall"
+  source               = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/net-vpc-firewall?ref=tf-training"
   project_id           = module.project.project_id
   network              = module.vpc-left.name
   admin_ranges_enabled = true
@@ -47,7 +47,7 @@ module "firewall-left" {
 }
 
 module "nat-left" {
-  source         = "../../modules/net-cloudnat"
+  source         = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/net-cloudnat?ref=tf-training"
   project_id     = module.project.project_id
   region         = var.region
   name           = "left"

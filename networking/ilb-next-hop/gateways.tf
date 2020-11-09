@@ -15,7 +15,7 @@
  */
 
 module "gw" {
-  source        = "../../modules/compute-vm"
+  source        = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/compute-vm?ref=tf-training"
   project_id    = module.project.project_id
   region        = var.region
   name          = "gw"
@@ -60,7 +60,7 @@ module "gw" {
 }
 
 module "ilb-left" {
-  source     = "../../modules/net-ilb"
+  source     = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/net-ilb?ref=tf-training"
   project_id = module.project.project_id
   region     = var.region
   name       = "ilb-left"

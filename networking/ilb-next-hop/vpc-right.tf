@@ -15,7 +15,7 @@
  */
 
 module "vpc-right" {
-  source     = "../../modules/net-vpc"
+  source     = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/net-vpc?ref=tf-training"
   project_id = module.project.project_id
   name       = "right"
   subnets = [
@@ -52,7 +52,7 @@ module "vpc-right" {
 }
 
 module "firewall-right" {
-  source               = "../../modules/net-vpc-firewall"
+  source               = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/net-vpc-firewall?ref=tf-training"
   project_id           = module.project.project_id
   network              = module.vpc-right.name
   admin_ranges_enabled = true
@@ -61,7 +61,7 @@ module "firewall-right" {
 }
 
 module "nat-right" {
-  source         = "../../modules/net-cloudnat"
+  source         = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/net-cloudnat?ref=tf-training"
   project_id     = module.project.project_id
   region         = var.region
   name           = "right"
