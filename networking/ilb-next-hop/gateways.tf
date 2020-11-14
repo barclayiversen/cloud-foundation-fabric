@@ -15,10 +15,10 @@
  */
 
 module "gw" {
-  source        = "../../modules/compute-vm"
+  source        = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/compute-vm?ref=tf-training"
   project_id    = module.project.project_id
   region        = var.region
-  name          = "${local.prefix}gw"
+  name          = "gw"
   instance_type = "f1-micro"
 
   boot_disk = {
@@ -52,7 +52,7 @@ module "gw" {
     })
   }
   service_account = try(
-    module.service-accounts.emails["${local.prefix}gce-vm"], null
+    module.service-accounts.emails["gce-vm"], null
   )
   service_account_scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   instance_count         = 2
@@ -60,37 +60,13 @@ module "gw" {
 }
 
 module "ilb-left" {
-  source     = "../../modules/net-ilb"
+  source     = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/net-ilb?ref=tf-training"
   project_id = module.project.project_id
   region     = var.region
-  name       = "${local.prefix}ilb-left"
+  name       = "ilb-left"
   network    = module.vpc-left.self_link
   subnetwork = values(module.vpc-left.subnet_self_links)[0]
-  address    = local.addresses.ilb-left
-  ports      = null
-  backend_config = {
-    session_affinity                = var.ilb_session_affinity
-    timeout_sec                     = null
-    connection_draining_timeout_sec = null
-  }
-  backends = [{
-    failover       = false
-    group          = module.gw.group.self_link
-    balancing_mode = "CONNECTION"
-  }]
-  health_check_config = {
-    type = "tcp", check = { port = 22 }, config = {}, logging = true
-  }
-}
-
-module "ilb-right" {
-  source     = "../../modules/net-ilb"
-  project_id = module.project.project_id
-  region     = var.region
-  name       = "${local.prefix}ilb-right"
-  network    = module.vpc-right.self_link
-  subnetwork = values(module.vpc-right.subnet_self_links)[0]
-  address    = local.addresses.ilb-right
+  address    = module.addresses.internal_addresses.ilb-left.address
   ports      = null
   backend_config = {
     session_affinity                = var.ilb_session_affinity

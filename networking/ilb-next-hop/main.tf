@@ -14,16 +14,8 @@
  * limitations under the License.
  */
 
-locals {
-  addresses = {
-    for k, v in module.addresses.internal_addresses :
-    trimprefix(k, local.prefix) => v.address
-  }
-  prefix = var.prefix == null || var.prefix == "" ? "" : "${var.prefix}-"
-}
-
 module "project" {
-  source         = "../../modules/project"
+  source         = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/project?ref=tf-training"
   name           = var.project_id
   project_create = var.project_create
   services = [
@@ -37,9 +29,9 @@ module "project" {
 }
 
 module "service-accounts" {
-  source     = "../../modules/iam-service-account"
+  source     = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/iam-service-account?ref=tf-training"
   project_id = module.project.project_id
-  name       = "${local.prefix}gce-vm"
+  name       = "gce-vm"
   iam_project_roles = {
     (var.project_id) = [
       "roles/logging.logWriter",
@@ -49,16 +41,12 @@ module "service-accounts" {
 }
 
 module "addresses" {
-  source     = "../../modules/net-address"
+  source     = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/net-address?ref=tf-training"
   project_id = module.project.project_id
   internal_addresses = {
-    "${local.prefix}ilb-left" = {
+    "ilb-left" = {
       region     = var.region,
       subnetwork = values(module.vpc-left.subnet_self_links)[0]
-    },
-    "${local.prefix}ilb-right" = {
-      region     = var.region,
-      subnetwork = values(module.vpc-right.subnet_self_links)[0]
     }
   }
 }

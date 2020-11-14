@@ -23,10 +23,10 @@ END
 }
 
 module "vm-left" {
-  source        = "../../modules/compute-vm"
+  source        = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/compute-vm?ref=tf-training"
   project_id    = module.project.project_id
   region        = var.region
-  name          = "${local.prefix}vm-left"
+  name          = "vm-left"
   instance_type = "f1-micro"
   network_interfaces = [
     {
@@ -49,10 +49,10 @@ module "vm-left" {
 }
 
 module "vm-right" {
-  source        = "../../modules/compute-vm"
+  source        = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/compute-vm?ref=tf-training"
   project_id    = module.project.project_id
   region        = var.region
-  name          = "${local.prefix}vm-right"
+  name          = "vm-right"
   instance_type = "f1-micro"
   network_interfaces = [
     {

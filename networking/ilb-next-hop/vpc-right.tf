@@ -15,25 +15,18 @@
  */
 
 module "vpc-right" {
-  source     = "../../modules/net-vpc"
+  source     = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/net-vpc?ref=tf-training"
   project_id = module.project.project_id
-  name       = "${local.prefix}right"
+  name       = "right"
   subnets = [
     {
       ip_cidr_range      = var.ip_ranges.right
-      name               = "${local.prefix}right"
+      name               = "right"
       region             = var.region
       secondary_ip_range = {}
     },
   ]
   routes = {
-    to-left-ilb = {
-      dest_range    = var.ip_ranges.left
-      priority      = var.ilb_right_enable ? 900 : 1100
-      tags          = null
-      next_hop_type = "ilb"
-      next_hop      = module.ilb-right.forwarding_rule.self_link
-    }
     to-left-gw-1 = {
       dest_range    = var.ip_ranges.left
       priority      = null
@@ -52,7 +45,7 @@ module "vpc-right" {
 }
 
 module "firewall-right" {
-  source               = "../../modules/net-vpc-firewall"
+  source               = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/net-vpc-firewall?ref=tf-training"
   project_id           = module.project.project_id
   network              = module.vpc-right.name
   admin_ranges_enabled = true
@@ -61,9 +54,9 @@ module "firewall-right" {
 }
 
 module "nat-right" {
-  source         = "../../modules/net-cloudnat"
+  source         = "github.com/terraform-google-modules/cloud-foundation-fabric//modules/net-cloudnat?ref=tf-training"
   project_id     = module.project.project_id
   region         = var.region
-  name           = "${local.prefix}right"
+  name           = "right"
   router_network = module.vpc-right.name
 }
