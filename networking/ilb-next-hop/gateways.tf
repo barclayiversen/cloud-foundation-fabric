@@ -51,9 +51,7 @@ module "gw" {
       ip_cidr_right = var.ip_ranges.right
     })
   }
-  service_account = try(
-    module.service-accounts.emails["gce-vm"], null
-  )
+  service_account = try(module.service-accounts.email, null)
   service_account_scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   instance_count         = 2
   group                  = { named_ports = null }
