@@ -20,13 +20,6 @@ module "gw" {
   region        = var.region
   name          = "gw"
   instance_type = "f1-micro"
-
-  boot_disk = {
-    image = "projects/ubuntu-os-cloud/global/images/family/ubuntu-2004-lts",
-    type  = "pd-ssd",
-    size  = 10
-  }
-
   network_interfaces = [
     {
       network    = module.vpc-left.self_link
@@ -46,12 +39,15 @@ module "gw" {
   tags           = ["ssh"]
   can_ip_forward = true
   metadata = {
-    user-data = templatefile("${path.module}/assets/gw.yaml", {
-      gw_right      = cidrhost(var.ip_ranges.right, 1)
-      ip_cidr_right = var.ip_ranges.right
-    })
+    startup-script = <<END
+    echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+    sysctl -p
+    apt update
+    apt upgrade -y
+    apt install -y iftop tcpdump
+    END
   }
-  service_account = try(module.service-accounts.email, null)
+  service_account        = try(module.service-accounts.email, null)
   service_account_scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   instance_count         = 2
   group                  = { named_ports = null }
