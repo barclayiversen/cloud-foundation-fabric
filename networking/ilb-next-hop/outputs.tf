@@ -13,3 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+output "cmd-get-health" {
+  description = "Get ILB backend health."
+  value       = <<END
+  gcloud compute backend-services get-health ilb-left \
+    --region ${var.region} --project ${var.project_id}
+  END
+}
